@@ -50,6 +50,7 @@ public class ServicesRegistration(IServiceCollection services, IConfiguration co
         services.AddTransient<IRemoveLegalEntityHandler, RemoveLegalEntityHandler>();
         services.AddTransient<ISignedLegalAgreementHandler, SignedLegalAgreementHandler>();
         services.AddTransient<ILevyAddedToAccountHandler, LevyAddedToAccountHandler>();
+        services.AddTransient<IApprenticeshipEmployerTypeChangeHandler, ApprenticeshipEmployerTypeChangeHandler>();
         services.AddTransient<IAddAccountHandler, AddAccountHandler>();
         services.AddTransient<IAccountNameUpdatedHandler, AccountNameUpdatedHandler>();
 
