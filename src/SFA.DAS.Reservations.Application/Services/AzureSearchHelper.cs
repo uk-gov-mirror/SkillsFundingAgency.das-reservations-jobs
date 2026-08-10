@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Azure;
 using Azure.Core.Serialization;
 using Azure.Identity;
@@ -8,10 +5,14 @@ using Azure.Search.Documents;
 using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
 using Azure.Search.Documents.Models;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Reservations.Domain.Configuration;
 using SFA.DAS.Reservations.Domain.Documents;
 using SFA.DAS.Reservations.Domain.Interfaces;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Reservations.Application.Services;
 
@@ -65,7 +66,7 @@ public class AzureSearchHelper : IAzureSearchHelper
         {
             if (index?.Value != null)
             {
-                await _adminClient.DeleteIndexAsync(indexName);
+                await _adminClient.DeleteIndexAsync(indexName,cancellationToken: CancellationToken.None);
             }
         }
         catch (Exception ex)

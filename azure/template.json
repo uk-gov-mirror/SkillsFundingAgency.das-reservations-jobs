@@ -404,6 +404,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
                     },
+                    "netFrameworkVersion": {
+                        "value": "v10.0"
+                    },
                     "subnetResourceId": {
                         "value": "[reference(concat('reservations-jobs-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
                     },
@@ -515,6 +518,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
+                    },
+                    "netFrameworkVersion": {
+                        "value": "v10.0"
                     },
                     "subnetResourceId": {
                         "value": "[reference(concat('reservations-jobs-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
@@ -632,6 +638,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
                     },
+                    "netFrameworkVersion": {
+                        "value": "v10.0"
+                    },
                     "subnetResourceId": {
                         "value": "[reference(concat('reservations-jobs-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
                     },
@@ -748,6 +757,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
                     },
+                    "netFrameworkVersion": {
+                        "value": "v10.0"
+                    },
                     "subnetResourceId": {
                         "value": "[reference(concat('reservations-jobs-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
                     },
@@ -855,6 +867,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
+                    },
+                    "netFrameworkVersion": {
+                        "value": "v10.0"
                     },
                     "subnetResourceId": {
                         "value": "[reference(concat('reservations-jobs-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
