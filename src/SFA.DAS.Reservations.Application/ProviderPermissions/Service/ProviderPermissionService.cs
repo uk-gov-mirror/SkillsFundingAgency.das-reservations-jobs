@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,46 @@ namespace SFA.DAS.Reservations.Application.ProviderPermissions.Service
             catch (Exception ex)
             {
                 logger.LogWarning($"Error updating index for ProviderId:[{updateEvent.Ukprn}], AccountLegalEntityId:[{updateEvent.AccountLegalEntityId}]", ex);
+            }
+        }
+
+        public async Task ReconcileForLevyStatusChange(long accountId, bool isLevy)
+        {
+            var permissions = permissionRepository.GetAllForAccount(accountId)
+                .Where(permission => permission.CanCreateCohort)
+                .ToList();
+
+            logger.LogInformation(
+                "Reconciling provider permissions search index for AccountId [{AccountId}] after levy status change. IsLevy [{IsLevy}]. CreateCohort permissions found [{PermissionCount}].",
+                accountId, isLevy, permissions.Count);
+
+            foreach (var permission in permissions)
+            {
+                try
+                {
+                    // Re-upsert so the local projection is refreshed after levy status change.
+                    await permissionRepository.Add(permission);
+
+                    if (isLevy)
+                    {
+                        await reservationService.DeleteProviderFromSearchIndex(
+                            Convert.ToUInt32(permission.ProviderId),
+                            permission.AccountLegalEntityId);
+                    }
+                    else
+                    {
+                        await reservationService.AddProviderToSearchIndex(
+                            (uint)permission.ProviderId,
+                            permission.AccountLegalEntityId);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex,
+                        "Error reconciling provider permission index for AccountId [{AccountId}], ProviderId [{ProviderId}], AccountLegalEntityId [{AccountLegalEntityId}], IsLevy [{IsLevy}].",
+                        accountId, permission.ProviderId, permission.AccountLegalEntityId, isLevy);
+                    throw;
+                }
             }
         }
 

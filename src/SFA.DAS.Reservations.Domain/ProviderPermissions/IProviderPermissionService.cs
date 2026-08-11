@@ -6,5 +6,6 @@ namespace SFA.DAS.Reservations.Domain.ProviderPermissions
     public interface IProviderPermissionService
     {
         Task AddProviderPermission(UpdatedPermissionsEvent updateEvent);
+        Task ReconcileForLevyStatusChange(long accountId, bool isLevy);
     }
 }

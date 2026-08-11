@@ -5,11 +5,13 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Reservations.Domain.AccountLegalEntities;
 using SFA.DAS.Reservations.Domain.Accounts;
+using SFA.DAS.Reservations.Domain.ProviderPermissions;
 
 namespace SFA.DAS.Reservations.Application.AccountLegalEntities.Handlers
 {
     public class ApprenticeshipEmployerTypeChangeHandler(
         IAccountsService accountsService,
+        IProviderPermissionService providerPermissionService,
         ILogger<ApprenticeshipEmployerTypeChangeHandler> logger)
         : IApprenticeshipEmployerTypeChangeHandler
     {
@@ -25,10 +27,13 @@ namespace SFA.DAS.Reservations.Application.AccountLegalEntities.Handlers
             try
             {
                 await accountsService.UpdateLevyStatus(apprenticeshipEmployerTypeChangeEvent.AccountId, isLevy);
+                await providerPermissionService.ReconcileForLevyStatusChange(
+                    apprenticeshipEmployerTypeChangeEvent.AccountId,
+                    isLevy);
             }
             catch (DbUpdateException e)
             {
-                logger.LogWarning("Could not update levy status for account {AccountId}", apprenticeshipEmployerTypeChangeEvent.AccountId, e);
+                logger.LogWarning(e, "Could not update levy status for account {AccountId}", apprenticeshipEmployerTypeChangeEvent.AccountId);
                 throw;
             }
         }
