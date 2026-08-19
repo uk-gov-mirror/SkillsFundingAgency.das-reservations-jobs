@@ -9,23 +9,29 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Reservations.Application.AccountLegalEntities.Handlers;
 using SFA.DAS.Reservations.Domain.Accounts;
+using SFA.DAS.Reservations.Domain.ProviderPermissions;
 
 namespace SFA.DAS.Reservations.Application.UnitTests.AccountLegalEntities.Handlers;
 
 public class WhenHandlingApprenticeshipEmployerTypeChangeEvent
 {
     private Mock<IAccountsService> _service;
+    private Mock<IProviderPermissionService> _providerPermissionService;
     private ApprenticeshipEmployerTypeChangeHandler _handler;
 
     [SetUp]
     public void Arrange()
     {
         _service = new Mock<IAccountsService>();
-        _handler = new ApprenticeshipEmployerTypeChangeHandler(_service.Object, Mock.Of<ILogger<ApprenticeshipEmployerTypeChangeHandler>>());
+        _providerPermissionService = new Mock<IProviderPermissionService>();
+        _handler = new ApprenticeshipEmployerTypeChangeHandler(
+            _service.Object,
+            _providerPermissionService.Object,
+            Mock.Of<ILogger<ApprenticeshipEmployerTypeChangeHandler>>());
     }
 
     [Test]
-    public async Task Then_Levy_Type_Updates_Status_To_True()
+    public async Task Then_Levy_Type_Updates_Status_To_True_And_Reconciles_Permissions()
     {
         var message = new ApprenticeshipEmployerTypeChangeEvent
         {
@@ -37,10 +43,11 @@ public class WhenHandlingApprenticeshipEmployerTypeChangeEvent
         await _handler.Handle(message);
 
         _service.Verify(x => x.UpdateLevyStatus(message.AccountId, true), Times.Once);
+        _providerPermissionService.Verify(x => x.ReconcileForLevyStatusChange(message.AccountId, true), Times.Once);
     }
 
     [Test]
-    public async Task Then_NonLevy_Type_Updates_Status_To_False()
+    public async Task Then_NonLevy_Type_Updates_Status_To_False_And_Reconciles_Permissions()
     {
         var message = new ApprenticeshipEmployerTypeChangeEvent
         {
@@ -52,6 +59,7 @@ public class WhenHandlingApprenticeshipEmployerTypeChangeEvent
         await _handler.Handle(message);
 
         _service.Verify(x => x.UpdateLevyStatus(message.AccountId, false), Times.Once);
+        _providerPermissionService.Verify(x => x.ReconcileForLevyStatusChange(message.AccountId, false), Times.Once);
     }
 
     [Test]
@@ -67,6 +75,7 @@ public class WhenHandlingApprenticeshipEmployerTypeChangeEvent
         await _handler.Handle(message);
 
         _service.Verify(x => x.UpdateLevyStatus(It.IsAny<long>(), It.IsAny<bool>()), Times.Never);
+        _providerPermissionService.Verify(x => x.ReconcileForLevyStatusChange(It.IsAny<long>(), It.IsAny<bool>()), Times.Never);
     }
 
     [Test]
@@ -84,5 +93,6 @@ public class WhenHandlingApprenticeshipEmployerTypeChangeEvent
 
         var action = () => _handler.Handle(message);
         action.Should().ThrowAsync<DbUpdateException>();
+        _providerPermissionService.Verify(x => x.ReconcileForLevyStatusChange(It.IsAny<long>(), It.IsAny<bool>()), Times.Never);
     }
 }

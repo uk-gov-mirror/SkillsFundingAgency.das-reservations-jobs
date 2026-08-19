@@ -21,6 +21,12 @@ namespace SFA.DAS.Reservations.Data.Repository
                 .Where(permission => permission.CanCreateCohort);
         }
 
+        public IEnumerable<ProviderPermission> GetAllForAccount(long accountId)
+        {
+            return dataContext.ProviderPermissions
+                .Where(permission => permission.AccountId == accountId);
+        }
+
         public async Task Add(ProviderPermission permission)
         {
             var existingPermission = await dataContext.ProviderPermissions.FindAsync(permission.AccountId,
