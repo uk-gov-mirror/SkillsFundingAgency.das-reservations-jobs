@@ -261,78 +261,6 @@
             }
         },
         {
-            "apiVersion": "2021-04-01",
-            "name": "[concat('role-assignment-', variables('functionAppNameReservationIndex'), '-ai-', parameters('utcValue'))]",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "principalId": {
-                        "value": "[reference(concat('function-app-rsrv-idx-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
-                    },
-                    "assignmentType": {
-                        "value": "AiSearchIndexContributor"
-                    },
-                    "resourceName": {
-                        "value": "[parameters('sharedAiSearchName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2021-04-01",
-            "name": "[concat('role-assignment-', variables('functionAppNameProviderPermissions'), '-ai-', parameters('utcValue'))]",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "principalId": {
-                        "value": "[reference(concat('function-app-rsrv-prv-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
-                    },
-                    "assignmentType": {
-                        "value": "AiSearchIndexContributor"
-                    },
-                    "resourceName": {
-                        "value": "[parameters('sharedAiSearchName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2021-04-01",
-            "name": "[concat('role-assignment-', variables('functionAppNameReservation'), '-ai-', parameters('utcValue'))]",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "principalId": {
-                        "value": "[reference(concat('function-app-rsrv-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
-                    },
-                    "assignmentType": {
-                        "value": "AiSearchIndexContributor"
-                    },
-                    "resourceName": {
-                        "value": "[parameters('sharedAiSearchName')]"
-                    }
-                }
-            }
-        },
-        {
             "apiVersion": "2020-06-01",
             "name": "[concat('storage-account-', parameters('utcValue'))]",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -1082,6 +1010,102 @@
                     },
                     "resourceName": {
                         "value": "[parameters('sharedServiceBusName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "[concat('role-assignment-', variables('functionAppNameReservationIndex'), '-ai-', parameters('utcValue'))]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[reference(concat('function-app-rsrv-idx-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
+                    },
+                    "assignmentType": {
+                        "value": "AiSearchIndexContributor"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedAiSearchName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "[concat('role-assignment-', variables('functionAppNameProviderPermissions'), '-ai-', parameters('utcValue'))]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[reference(concat('function-app-rsrv-prv-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
+                    },
+                    "assignmentType": {
+                        "value": "AiSearchIndexContributor"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedAiSearchName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "[concat('role-assignment-', variables('functionAppNameReservation'), '-ai-', parameters('utcValue'))]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[reference(concat('function-app-rsrv-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
+                    },
+                    "assignmentType": {
+                        "value": "AiSearchIndexContributor"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedAiSearchName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "[concat('role-assignment-', variables('functionAppNameLegalEntities'), '-ai-', parameters('utcValue'))]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-ai-search.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[reference(concat('function-app-legalentities-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
+                    },
+                    "assignmentType": {
+                        "value": "AiSearchIndexContributor"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedAiSearchName')]"
                     }
                 }
             }
